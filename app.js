@@ -21,7 +21,9 @@ request(url, (err,res,body) => {
 
     const pngIndex = body.indexOf('.png"/>');
 
-    const bodySlice = body.slice(imgTagIndex, pngIndex)
+    const bodySlice = body.slice(imgTagIndex, pngIndex);
+    const arraySplit = bodySlice.split('/');
+    const imgFile = arraySplit[2] + '.png';
     const imgPath = bodySlice + '.png';
     const imgUrl = 'http://perltest.my-mobile.org' + imgPath;
     
@@ -32,16 +34,18 @@ request(url, (err,res,body) => {
           const options = {
             url: url,
             method: 'POST',
-            form: {'file': imgPath ,
+            form: {'file': imgFile ,
                    'text': result.text.replace(/\r?\n|\r/g,'').replace(/\s/g,''),
                    'u' : 'itamarmuslvi',
                    'p' : 'vrix565'}
         };
+
         
         // Start the request
         request(options, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 // Print out the response body
+                console.log(body);
                 process.exit(0);
             }
             else{
